@@ -3,9 +3,11 @@ import { View, StyleSheet, PanResponder, ActivityIndicator, Text } from 'react-n
 import { Canvas, useFrame } from '@react-three/fiber';
 import type { Group } from 'three';
 import AvatarModel from './AvatarModel';
+import { AnimationController } from '../engine/AnimationController';
 
 interface AvatarViewerProps {
   avatarUrl?: string;
+  onControllerReady?: (controller: AnimationController) => void;
 }
 
 /** Reads a rotation ref every frame so drag-to-orbit doesn't trigger React re-renders. */
@@ -19,7 +21,7 @@ function OrbitRig({ rotationRef, children }: { rotationRef: React.MutableRefObje
   return <group ref={group}>{children}</group>;
 }
 
-export default function AvatarViewer({ avatarUrl }: AvatarViewerProps) {
+export default function AvatarViewer({ avatarUrl, onControllerReady }: AvatarViewerProps) {
   const rotationRef = useRef(0);
   const dragStartRotation = useRef(0);
   const [loading, setLoading] = useState(!!avatarUrl);
@@ -40,8 +42,11 @@ export default function AvatarViewer({ avatarUrl }: AvatarViewerProps) {
   return (
     <View style={styles.container} {...panResponder.panHandlers}>
       <Canvas
-        camera={{ position: [0, 1.5, 2.5], fov: 35 }}
-        onCreated={(state) => state.gl.setClearColor('#1b1e24')}
+        camera={{ position: [0, 1.4, 2.2], fov: 45 }}
+        onCreated={(state) => {
+          state.gl.setClearColor('#1b1e24');
+          state.camera.lookAt(0, 1.2, 0); // Look at the chest/head area
+        }}
       >
         <ambientLight intensity={0.7} />
         <directionalLight position={[2, 4, 2]} intensity={1.2} />
@@ -50,7 +55,10 @@ export default function AvatarViewer({ avatarUrl }: AvatarViewerProps) {
           <OrbitRig rotationRef={rotationRef}>
             <AvatarModel
               source={avatarUrl}
-              onLoaded={() => setLoading(false)}
+              onLoaded={(controller) => {
+                setLoading(false);
+                onControllerReady?.(controller);
+              }}
               onError={(message) => {
                 setLoading(false);
                 setError(message);

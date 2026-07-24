@@ -10,4 +10,4 @@
  * Left empty by default: this sandbox has no network access to readyplayer.me, so no
  * sample avatar could be downloaded or verified here.
  */
-export const DEFAULT_AVATAR_URL = '';
+export const DEFAULT_AVATAR_URL = '/avatar.glb';
