@@ -43,3 +43,6 @@ yarn-error.*
 temp_clone_signkit/
 .idea/
 .vercel
+
+# SignKit reference repo (not needed in production)
+signkit/

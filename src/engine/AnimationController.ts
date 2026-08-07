@@ -84,6 +84,48 @@ export class AnimationController {
     }
   }
 
+  public get isAnimating(): boolean {
+    return this.animations.length > 0;
+  }
+
+  public clearQueue() {
+    this.animations = [];
+    this.pending = false;
+    this.flag = false;
+  }
+
+  /** Play a single alphabet letter sign (for Learn page) */
+  public playLetter(char: string) {
+    const ch = char.toUpperCase();
+    const ref = {
+      animations: this.animations,
+      avatar: this.avatar,
+      characters: this.characters,
+      pending: this.pending,
+      animate: () => {},
+    };
+    if ((alphabets as any)[ch]) {
+      (alphabets as any)[ch](ref);
+      if (!this.pending) this.pending = true;
+    }
+  }
+
+  /** Play a single word sign (for Learn page) */
+  public playWord(word: string) {
+    const w = word.toUpperCase();
+    const ref = {
+      animations: this.animations,
+      avatar: this.avatar,
+      characters: this.characters,
+      pending: this.pending,
+      animate: () => {},
+    };
+    if ((words as any)[w]) {
+      (words as any)[w](ref);
+      if (!this.pending) this.pending = true;
+    }
+  }
+
   public playSequence(glosses: string[]) {
     console.log('[AnimationController] Queueing sequence:', glosses);
     
