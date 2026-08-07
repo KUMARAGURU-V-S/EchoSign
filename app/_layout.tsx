@@ -1,5 +1,10 @@
 import { Stack } from 'expo-router';
 
+// Polyfill for three.js loaders expecting ProgressEvent
+if (typeof global.ProgressEvent === 'undefined') {
+  global.ProgressEvent = class ProgressEvent {} as any;
+}
+
 export default function RootLayout() {
   return (
     <Stack

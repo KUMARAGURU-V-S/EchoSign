@@ -25,15 +25,24 @@ export default function HomeScreen() {
 
   useEffect(() => {
     speechEngine.current.onResult = (result) => {
+      console.log('Speech result:', result.transcript);
       setTranscript(result.transcript);
     };
     
+    speechEngine.current.onError = (err) => {
+      console.warn('Speech error:', err);
+      setIsListening(false);
+    };
+
     speechEngine.current.onEnd = () => {
       setIsListening(false);
     };
 
     return () => {
       speechEngine.current.stop();
+      if (speechEngine.current.destroy) {
+        speechEngine.current.destroy();
+      }
     };
   }, []);
   
@@ -50,13 +59,14 @@ export default function HomeScreen() {
     }
   }, [speed, pauseTime]);
 
-  const toggleListening = () => {
+  const toggleListening = async () => {
     if (isListening) {
-      speechEngine.current.stop();
+      setIsListening(false);
+      await speechEngine.current.stop();
     } else {
       setTranscript('');
-      speechEngine.current.start();
       setIsListening(true);
+      await speechEngine.current.start();
     }
   };
 

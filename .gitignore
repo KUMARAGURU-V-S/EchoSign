@@ -42,3 +42,4 @@ yarn-error.*
 .tmp_sign_kit/
 temp_clone_signkit/
 .idea/
+.vercel
