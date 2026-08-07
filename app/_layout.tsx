@@ -14,7 +14,9 @@ export default function RootLayout() {
         contentStyle: { backgroundColor: '#111318' },
       }}
     >
-      <Stack.Screen name="index" options={{ title: 'EchoSign' }} />
+      <Stack.Screen name="index" options={{ title: 'Welcome', headerShown: false }} />
+      <Stack.Screen name="avatar" options={{ title: 'EchoSign', headerShown: true, headerBackTitle: 'Back' }} />
+      <Stack.Screen name="learn" options={{ title: 'Learn Sign Language', headerShown: false }} />
     </Stack>
   );
 }
